@@ -2,11 +2,15 @@ pipeline {
     agent {
         docker {
             image 'node:18'
+            reuseNode true
         }
     }
 
     stages {
         stage('Test npm') {
+            agent{
+                docker
+            }
             steps {
                 sh 'npm --version'
                 sh 'node --version'
