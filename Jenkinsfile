@@ -3,17 +3,13 @@ pipeline {
         docker {
             image 'node:18'
             reuseNode true
+            args '-u root'   // ⭐ แก้ permission ตัวต้นเหตุ
         }
     }
 
     stages {
+
         stage('Test npm') {
-            agent{
-                docker{
-                    image 'node:18'
-                    reuseNode true
-                    }
-            }
             steps {
                 sh 'npm --version'
                 sh 'node --version'
@@ -22,8 +18,12 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'npm install'
-                sh 'npm run build'
+                sh '''
+                rm -rf node_modules package-lock.json
+                npm cache clean --force
+                npm install
+                npm run build
+                '''
             }
         }
     }
