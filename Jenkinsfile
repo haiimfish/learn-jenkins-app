@@ -9,7 +9,10 @@ pipeline {
     stages {
         stage('Test npm') {
             agent{
-                docker
+                docker{
+                    image 'node:18'
+                    reuseNode true
+                    }
             }
             steps {
                 sh 'npm --version'
